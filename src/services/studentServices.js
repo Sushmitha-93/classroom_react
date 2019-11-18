@@ -6,6 +6,10 @@ export function getStudents() {
   return Axios.get("/students");
 }
 
+export function getStudent(studentId) {
+  return Axios.get("/students/" + studentId);
+}
+
 export function deleteStudent(movieId) {
   return Axios.delete("/students/" + movieId);
 }

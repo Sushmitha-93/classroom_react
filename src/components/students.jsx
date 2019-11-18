@@ -59,7 +59,9 @@ class Students extends Component {
                     </button>
                   </td>
                   <td>
-                    <i className="fas fa-user-edit"></i>
+                    <Link to={"/studentForm/" + student._id}>
+                      <i className="fas fa-user-edit"></i>
+                    </Link>
                   </td>
                 </tr>
               ))}

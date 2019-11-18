@@ -1,8 +1,30 @@
 import React, { Component } from "react";
-import { saveStudent } from "../services/studentServices";
+import { saveStudent, getStudent } from "../services/studentServices";
 
 class StudentForm extends Component {
-  state = { data: {} };
+  state = {
+    data: {
+      name: "",
+      rollno: "",
+      class: "",
+      gender: "",
+      phone: "",
+      address: ""
+    }
+  };
+
+  componentDidMount() {
+    this.populateStudent();
+  }
+
+  populateStudent = async () => {
+    const studentId = this.props.match.params.id;
+    if (studentId === "new") return;
+
+    const { data: student } = await getStudent(studentId);
+    console.log(student);
+    this.setState({ data: student });
+  };
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -36,6 +58,7 @@ class StudentForm extends Component {
                 id="name"
                 placeholder="Enter name"
                 onChange={this.handleChange}
+                value={this.state.data.name}
               />
             </div>
             <div className="form-row">
@@ -47,6 +70,7 @@ class StudentForm extends Component {
                   id="class"
                   placeholder="Enter class"
                   onChange={this.handleChange}
+                  value={this.state.data.class}
                 />
               </div>
               <div className="form-group col">
@@ -57,6 +81,7 @@ class StudentForm extends Component {
                   id="rollno"
                   placeholder="Enter roll no."
                   onChange={this.handleChange}
+                  value={this.state.data.rollno}
                 />
               </div>
             </div>
@@ -66,6 +91,7 @@ class StudentForm extends Component {
                 className="form-control"
                 id="gender"
                 onChange={this.handleChange}
+                value={this.state.data.gender}
               >
                 <option defaultValue>Select Gender</option>
                 <option>Female</option>
@@ -80,6 +106,7 @@ class StudentForm extends Component {
                 id="phone"
                 placeholder="Enter Phone"
                 onChange={this.handleChange}
+                value={this.state.data.phone}
               />
             </div>
             <div className="form-group">
@@ -89,6 +116,7 @@ class StudentForm extends Component {
                 id="address"
                 rows="3"
                 onChange={this.handleChange}
+                value={this.state.data.address}
               ></textarea>
             </div>
             <button type="submit" className="btn btn-primary">

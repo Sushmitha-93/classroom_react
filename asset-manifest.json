@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/classroom_react/static/css/main.cfda8877.chunk.css",
+    "main.js": "/classroom_react/static/js/main.3c9f810d.chunk.js",
+    "main.js.map": "/classroom_react/static/js/main.3c9f810d.chunk.js.map",
+    "runtime-main.js": "/classroom_react/static/js/runtime-main.cde8300a.js",
+    "runtime-main.js.map": "/classroom_react/static/js/runtime-main.cde8300a.js.map",
+    "static/css/2.833dd627.chunk.css": "/classroom_react/static/css/2.833dd627.chunk.css",
+    "static/js/2.42d4b3d1.chunk.js": "/classroom_react/static/js/2.42d4b3d1.chunk.js",
+    "static/js/2.42d4b3d1.chunk.js.map": "/classroom_react/static/js/2.42d4b3d1.chunk.js.map",
+    "index.html": "/classroom_react/index.html",
+    "precache-manifest.269bea61432f48becc44f2bdbb9b56fd.js": "/classroom_react/precache-manifest.269bea61432f48becc44f2bdbb9b56fd.js",
+    "service-worker.js": "/classroom_react/service-worker.js",
+    "static/css/2.833dd627.chunk.css.map": "/classroom_react/static/css/2.833dd627.chunk.css.map",
+    "static/css/main.cfda8877.chunk.css.map": "/classroom_react/static/css/main.cfda8877.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cde8300a.js",
+    "static/css/2.833dd627.chunk.css",
+    "static/js/2.42d4b3d1.chunk.js",
+    "static/css/main.cfda8877.chunk.css",
+    "static/js/main.3c9f810d.chunk.js"
+  ]
+}

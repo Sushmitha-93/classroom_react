@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import { getStudents, deleteStudent } from "../services/studentServices";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 
 class Students extends Component {
   state = {
-    students: []
+    students: [],
+    pageSize: 10,
+    currentPage: 1
   };
 
   async componentDidMount() {
+    // Do get request to Student API to get student info
     const response = await getStudents();
     console.log(response);
     this.setState({ students: response.data });
@@ -27,12 +31,43 @@ class Students extends Component {
     }
   };
 
+  handlePageChange = page => {
+    this.setState({ currentPage: page });
+  };
+
+  getPagedData = () => {
+    const startIndex = (this.state.currentPage - 1) * this.state.pageSize;
+    const endIndex = startIndex + this.state.pageSize;
+    return _.slice(this.state.students, startIndex, endIndex);
+  };
+
+  getPageRange = () => {
+    const pageCount = Math.ceil(
+      this.state.students.length / this.state.pageSize
+    );
+    return _.range(1, pageCount + 1);
+  };
+
   render() {
-    const { students } = this.state;
+    const students = this.getPagedData();
+    const pageRange = this.getPageRange();
+    const { currentPage } = this.state;
+
     return (
       <React.Fragment>
         <div className="container">
-          <h1>Students</h1>
+          <div className="row mt-3">
+            <h1 className="ml-3">Students</h1>
+            <div className="ml-auto mr-3">
+              <Link to="/studentForm/new">
+                <button type="button" className="btn btn-primary btn-lg">
+                  Add Student&nbsp;&nbsp;
+                  <i className="fas fa-user-plus"></i>
+                </button>
+              </Link>
+            </div>
+          </div>
+
           <table className="table">
             <thead>
               <tr>
@@ -53,13 +88,19 @@ class Students extends Component {
                     <button
                       type="button"
                       className="close"
+                      data-toggle="tooltip"
+                      title="Delete"
                       onClick={() => this.handleDelete(student)}
                     >
                       &times;
                     </button>
                   </td>
                   <td>
-                    <Link to={"/studentForm/" + student._id}>
+                    <Link
+                      to={"/studentForm/" + student._id}
+                      data-toggle="tooltip"
+                      title="Edit"
+                    >
                       <i className="fas fa-user-edit"></i>
                     </Link>
                   </td>
@@ -67,12 +108,51 @@ class Students extends Component {
               ))}
             </tbody>
           </table>
-          <Link to="/studentForm/new">
-            <button type="button" className="btn btn-primary btn-lg">
-              Add Student&nbsp;&nbsp;
-              <i className="fas fa-user-plus"></i>
-            </button>
-          </Link>
+
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="#"
+                  onClick={() =>
+                    this.handlePageChange(
+                      currentPage > 1 ? currentPage - 1 : currentPage
+                    )
+                  }
+                >
+                  Previous
+                </a>
+              </li>
+
+              {pageRange.map(page => (
+                <li class="page-item">
+                  <a
+                    class="page-link"
+                    href="#"
+                    onClick={() => this.handlePageChange(page)}
+                  >
+                    {page}
+                  </a>
+                </li>
+              ))}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="#"
+                  onClick={() =>
+                    this.handlePageChange(
+                      currentPage != pageRange.length
+                        ? currentPage + 1
+                        : currentPage
+                    )
+                  }
+                >
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </React.Fragment>
     );

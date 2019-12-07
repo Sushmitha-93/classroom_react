@@ -32,7 +32,7 @@ class StudentForm extends Component {
     console.log(this.state.data);
 
     const response = await saveStudent(this.state.data);
-    this.props.history.push("/");
+    this.props.history.push("/"); // takes to home page
     console.log(response);
   };
 

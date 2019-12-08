@@ -9,7 +9,8 @@ class Students extends Component {
   state = {
     students: [],
     pageSize: 10,
-    currentPage: 1
+    currentPage: 1,
+    sort: { column: "rollno", order: "asc" }
   };
 
   async componentDidMount() {
@@ -37,10 +38,19 @@ class Students extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleSort = sort => {
+    this.setState({ sort });
+  };
+
   getPageData = () => {
+    const { students, sort } = this.state;
+    //SORT
+    const sortedStudents = _.orderBy(students, [sort.column], [sort.order]);
+
+    // PAGINATE
     const startIndex = (this.state.currentPage - 1) * this.state.pageSize;
     const endIndex = startIndex + this.state.pageSize;
-    return _.slice(this.state.students, startIndex, endIndex);
+    return _.slice(sortedStudents, startIndex, endIndex);
   };
 
   render() {
@@ -63,7 +73,12 @@ class Students extends Component {
             </div>
           </div>
 
-          <StudentTable students={students} onDelete={this.handleDelete} />
+          <StudentTable
+            students={students}
+            onDelete={this.handleDelete}
+            onSort={this.handleSort}
+            sort={this.state.sort}
+          />
 
           <Pagination
             currentPage={currentPage}

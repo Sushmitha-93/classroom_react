@@ -15,10 +15,10 @@ const Pagination = ({
   const pageRange = getPageRange();
   return (
     <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
+      <ul className="pagination">
+        <li className="page-item">
           <a
-            class="page-link"
+            className="page-link"
             onClick={() =>
               onPageChange(currentPage > 1 ? currentPage - 1 : currentPage)
             }
@@ -28,18 +28,21 @@ const Pagination = ({
         </li>
 
         {pageRange.map(page => (
-          <li class={page === currentPage ? "page-item active" : "page-item"}>
-            <a class="page-link" onClick={() => onPageChange(page)}>
+          <li
+            key={page}
+            className={page === currentPage ? "page-item active" : "page-item"}
+          >
+            <a className="page-link" onClick={() => onPageChange(page)}>
               {page}
             </a>
           </li>
         ))}
-        <li class="page-item">
+        <li className="page-item">
           <a
-            class="page-link"
+            className="page-link"
             onClick={() =>
               onPageChange(
-                currentPage != pageRange.length ? currentPage + 1 : currentPage
+                currentPage !== pageRange.length ? currentPage + 1 : currentPage
               )
             }
           >

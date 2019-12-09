@@ -10,7 +10,8 @@ class Students extends Component {
     students: [],
     pageSize: 10,
     currentPage: 1,
-    sort: { column: "rollno", order: "asc" }
+    sort: { column: "rollno", order: "asc" },
+    search: { path: "", value: "" }
   };
 
   async componentDidMount() {
@@ -42,10 +43,29 @@ class Students extends Component {
     this.setState({ sort });
   };
 
+  handleSearch = search => {
+    this.setState({ search });
+  };
+
   getPageData = () => {
-    const { students, sort } = this.state;
+    const { students, sort, search } = this.state;
+
+    //FILTER by Search value
+    let filteredStudents;
+    if (search.value !== "")
+      filteredStudents = students.filter(
+        stud =>
+          stud[search.path].toLowerCase().search(search.value.toLowerCase()) >=
+          0
+      );
+    else filteredStudents = students;
+
     //SORT
-    const sortedStudents = _.orderBy(students, [sort.column], [sort.order]);
+    const sortedStudents = _.orderBy(
+      filteredStudents,
+      [sort.column],
+      [sort.order]
+    );
 
     // PAGINATE
     const startIndex = (this.state.currentPage - 1) * this.state.pageSize;
@@ -78,6 +98,7 @@ class Students extends Component {
             onDelete={this.handleDelete}
             onSort={this.handleSort}
             sort={this.state.sort}
+            onSearch={this.handleSearch}
           />
 
           <Pagination

@@ -20,6 +20,13 @@ class StudentTable extends Component {
     onSort(sort);
   };
 
+  renderSortIcon = col => {
+    const { sort } = this.props;
+    if (col === sort.column)
+      if (sort.order === "asc") return <i className="fas fa-sort-up" />;
+      else return <i className="fas fa-sort-down" />;
+  };
+
   render() {
     const { students } = this.props;
     return (
@@ -28,11 +35,15 @@ class StudentTable extends Component {
           <tr>
             {this.state.col.map(col => (
               <th
+                style={{ cursor: "pointer" }}
+                data-toggle="tooltip"
+                title="sort"
                 className="clickable"
                 key={col.path}
                 onClick={() => this.raiseSort(col.path)}
               >
-                {col.label}
+                {col.label}&nbsp;
+                {this.renderSortIcon(col.path)}
               </th>
             ))}
             <th></th>
@@ -41,27 +52,21 @@ class StudentTable extends Component {
         </thead>
         <tbody>
           <tr>
-            <td>
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Search"
-              />
-            </td>
-            <td>
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Search"
-              />
-            </td>
-            <td>
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Search"
-              />
-            </td>
+            {this.state.col.map(col => (
+              <td key={col.path}>
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Search"
+                  onChange={e =>
+                    this.props.onSearch({
+                      path: col.path,
+                      value: e.currentTarget.value
+                    })
+                  }
+                />
+              </td>
+            ))}
             <td></td>
             <td></td>
           </tr>

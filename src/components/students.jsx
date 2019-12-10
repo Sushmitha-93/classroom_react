@@ -55,8 +55,10 @@ class Students extends Component {
     if (search.value !== "")
       filteredStudents = students.filter(
         stud =>
-          stud[search.path].toLowerCase().search(search.value.toLowerCase()) >=
-          0
+          stud[search.path]
+            .toString()
+            .toLowerCase()
+            .search(search.value.toLowerCase()) >= 0
       );
     else filteredStudents = students;
 

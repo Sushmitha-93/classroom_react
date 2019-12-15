@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { saveStudent, getStudent } from "../services/studentServices";
+import * as yup from "yup";
+import Input from "./FormComponents/input";
 
 class StudentForm extends Component {
   state = {
@@ -10,13 +12,45 @@ class StudentForm extends Component {
       gender: "",
       phone: "",
       address: ""
-    }
+    },
+    responseError: "",
+    validationErrors: {}
+  };
+
+  // Dont define schema as a Yup Schema. Because we will be doing that in handleChange(),
+  // to create Yup schema object for each property. So, just define a plain object.
+  schema = {
+    name: yup
+      .string()
+      .required()
+      .label("Name"),
+    rollno: yup
+      .number()
+      .required()
+      .label("Roll no."),
+    class: yup
+      .string()
+      .required()
+      .label("Class"),
+    gender: yup
+      .string()
+      .required()
+      .label("Gender"),
+    phone: yup
+      .string()
+      .required()
+      .label("Phone"),
+    address: yup
+      .string()
+      .required()
+      .label("Address")
   };
 
   componentDidMount() {
     this.populateStudent();
   }
 
+  // Populate based on id in URL. If it is 'new' or 'student id'
   populateStudent = async () => {
     const studentId = this.props.match.params.id;
     if (studentId === "new") return;
@@ -30,15 +64,42 @@ class StudentForm extends Component {
     e.preventDefault();
     console.log("Handle submit");
     console.log(this.state.data);
+    try {
+      // PUT request to node
+      const response = await saveStudent(this.state.data); // will throw error if response is not 200 which will be caught in catch block
 
-    const response = await saveStudent(this.state.data);
-    this.props.history.push("/"); // takes to home page
-    console.log(response);
+      this.props.history.push("/"); // takes to home page
+      console.log(response);
+    } catch (err) {
+      console.log("Error response on Submit: ", err.response);
+      if (err.response.data.includes("rollno_1 dup key"))
+        this.setState({
+          responseError: "Roll no exists. Try different number"
+        });
+      else this.setState({ responseError: err.response.data });
+    }
   };
 
-  handleChange = e => {
+  handleChange = async e => {
+    const { id, value } = e.currentTarget;
+    const { validationErrors } = this.state;
+    // yup browser form validation
+    const obj = { [id]: value };
+    const schema = yup.object().shape({ [id]: this.schema[id] }); // creating yup schema for only that property
+
+    await schema
+      .validate(obj)
+      .then(delete validationErrors[id])
+      .catch(error => {
+        //console.log("yup validation result:", error);
+        const errorMsg = error.errors[0];
+        console.log("Yup validation error: ", errorMsg);
+        validationErrors[id] = errorMsg;
+      });
+
+    // setting input field data
     const data = { ...this.state.data };
-    data[e.currentTarget.id] = e.currentTarget.value;
+    data[id] = value;
     this.setState({ data });
   };
 
@@ -49,41 +110,40 @@ class StudentForm extends Component {
           <h1>
             {this.props.match.params.id === "new" ? "New" : ""} Student Form
           </h1>
+          {this.state.responseError && (
+            <div className="alert alert-danger">{this.state.responseError}</div>
+          )}
           <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                placeholder="Enter name"
-                onChange={this.handleChange}
-                value={this.state.data.name}
-              />
-            </div>
+            <Input
+              id={"name"}
+              label={"Name"}
+              type={"text"}
+              placeholder={"Enter name"}
+              onChange={this.handleChange}
+              value={this.state.data.name}
+              validationError={this.state.validationErrors["name"]}
+            />
             <div className="form-row">
-              <div className="form-group col">
-                <label htmlFor="class">Class</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="class"
-                  placeholder="Enter class"
-                  onChange={this.handleChange}
-                  value={this.state.data.class}
-                />
-              </div>
-              <div className="form-group col">
-                <label htmlFor="rollno">Roll No.</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="rollno"
-                  placeholder="Enter roll no."
-                  onChange={this.handleChange}
-                  value={this.state.data.rollno}
-                />
-              </div>
+              <Input
+                className={"form-group col"}
+                id={"class"}
+                label={"Class"}
+                type={"text"}
+                placeholder={"Enter class"}
+                onChange={this.handleChange}
+                value={this.state.data.class}
+                validationError={this.state.validationErrors["class"]}
+              />
+              <Input
+                className={"form-group col"}
+                id={"rollno"}
+                label={"Roll No."}
+                type={"text"}
+                placeholder={"Enter roll no."}
+                onChange={this.handleChange}
+                value={this.state.data.rollno}
+                validationError={this.state.validationErrors["rollno"]}
+              />
             </div>
             <div className="form-group">
               <label htmlFor="gender">Gender</label>
@@ -98,17 +158,15 @@ class StudentForm extends Component {
                 <option>Male</option>
               </select>
             </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                type="text"
-                className="form-control"
-                id="phone"
-                placeholder="Enter Phone"
-                onChange={this.handleChange}
-                value={this.state.data.phone}
-              />
-            </div>
+            <Input
+              id={"phone"}
+              label={"Phone"}
+              type={"text"}
+              placeholder={"Enter Phone"}
+              onChange={this.handleChange}
+              value={this.state.data.phone}
+              validationError={this.state.validationErrors["phone"]}
+            />
             <div className="form-group">
               <label htmlFor="address">Address</label>
               <textarea
@@ -117,6 +175,7 @@ class StudentForm extends Component {
                 rows="3"
                 onChange={this.handleChange}
                 value={this.state.data.address}
+                validationError={this.state.validationErrors["address"]}
               ></textarea>
             </div>
             <button type="submit" className="btn btn-primary">

@@ -22,14 +22,15 @@ class StudentForm extends Component {
   schema = {
     name: yup
       .string()
-      .required()
+      .required("Name is required")
       .label("Name"),
     rollno: yup
       .number()
+      .typeError("Roll must be a number")
       .required()
       .label("Roll no."),
     class: yup
-      .string()
+      .string("Class is required")
       .required()
       .label("Class"),
     gender: yup
@@ -38,11 +39,11 @@ class StudentForm extends Component {
       .label("Gender"),
     phone: yup
       .string()
-      .required()
+      .required("Phone is required")
       .label("Phone"),
     address: yup
       .string()
-      .required()
+      .required("Address is required")
       .label("Address")
   };
 
@@ -71,6 +72,7 @@ class StudentForm extends Component {
       this.props.history.push("/"); // takes to home page
       console.log(response);
     } catch (err) {
+      // to handle 400 error when existing rollno is given by user
       console.log("Error response on Submit: ", err.response);
       if (err.response.data.includes("rollno_1 dup key"))
         this.setState({
@@ -92,7 +94,7 @@ class StudentForm extends Component {
       .then(delete validationErrors[id])
       .catch(error => {
         //console.log("yup validation result:", error);
-        const errorMsg = error.errors[0];
+        const errorMsg = error.errors[0]; // not doing set state here
         console.log("Yup validation error: ", errorMsg);
         validationErrors[id] = errorMsg;
       });

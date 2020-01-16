@@ -8,6 +8,7 @@ import StudentForm from "./components/studentForm";
 import NavBar from "./components/navbar";
 import LoginForm from "./components/loginForm";
 import SignUp from "./components/signupForm";
+import Logout from "./components/logout";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/studentForm/:id" component={StudentForm} />
         <Route path="/loginForm" component={LoginForm} />
         <Route path="/signupForm" component={SignUp} />
+        <Route path="/logout" component={Logout} />
       </Switch>
     </React-Fragment>
   );

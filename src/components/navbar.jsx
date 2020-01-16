@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "../services/authService";
 
 const NavBar = () => {
+  const user = getCurrentUser();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link className="navbar-brand" to="/">
@@ -25,18 +27,29 @@ const NavBar = () => {
               Home <span className="sr-only">(current)</span>
             </Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/loginForm">
-              Login
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/signupForm">
-              Sign Up
-            </Link>
-          </li>
+          {!user && (
+            <React.Fragment>
+              <li className="nav-item">
+                <Link className="nav-link" to="/loginForm">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/signupForm">
+                  Sign Up
+                </Link>
+              </li>
+            </React.Fragment>
+          )}
+          {user && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/logout">
+                Logout
+              </Link>
+            </li>
+          )}
         </ul>
-        <span className="navbar-text">Navbar text with an inline element</span>
+        <span className="navbar-text">{user && "Hello " + user.username}</span>
       </div>
     </nav>
   );

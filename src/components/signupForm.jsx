@@ -3,6 +3,7 @@ import Input from "./FormComponents/input";
 import * as yup from "yup";
 import { saveUser } from "../services/userServices";
 import _ from "lodash";
+import { setJwt } from "../services/authService";
 
 class SignUp extends Component {
   state = {
@@ -26,32 +27,52 @@ class SignUp extends Component {
   });
 
   handleSubmit = async e => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    const user = {
-      username: e.target.username.value,
-      email: e.target.email.value,
-      password: e.target.password.value
-    };
-    console.log(user);
+      // 1. Create user object from values of form at the time of 'Submit'
+      const user = {
+        username: e.target.username.value,
+        email: e.target.email.value,
+        password: e.target.password.value
+      };
+      console.log("outside: creating user: ", user);
 
-    await this.schema
-      .validate(user, { abortEarly: false })
-      .then(async () => {
-        const res = await saveUser(user);
-        console.log(res);
-      })
-      .catch(err => {
+      // 2. Yup Validation (at browser level) to validate form input
+      await this.schema.validate(user, { abortEarly: false }).catch(err => {
+        //console.log(err.inner);
         const errobj = _.keyBy(
           _.map(err.inner, o => _.pick(o, ["path", "message"])),
           "path"
-        );
-        //console.log(err.inner);
+        );        
         console.log(errobj);
-        //console.log(errobj.username.message);
+
         this.setState({ validationErrors: errobj });
-        console.log(this.state.validationErrors);
+        // throwing error so that execution stops and next await wont get executed.
+        throw new Error("signup form validation error");
       });
+
+      // 3. Send request to save new user
+      await saveUser(user)
+        .then(res => {
+          this.setState({ validationErrors: {} });
+          // if you want to use any custom headers sent in response at client side, "access-control-expose-headers" should be set in response
+          setJwt(res.headers["x-jwt"]);
+          window.location = "/";
+        })
+        .catch(err => {
+          console.log(err);
+          let errObj;
+          if (err.response.data.includes("email_1 dup key")) {
+            errObj = {
+              email: { path: "email", message: "Email ID already exists" }
+            };
+            this.setState({ validationErrors: errObj });
+          }
+        });
+    } catch (e) {
+      console.log("trycatch error:", e);
+    }
   };
 
   render() {
@@ -68,6 +89,7 @@ class SignUp extends Component {
               type={"text"}
               placeholder={"Enter username"}
               validationError={
+                // if state property has nested object it will throw undefined error. But if its not a nested object, {username:"username required"}, it wont throw error
                 this.state.validationErrors.username &&
                 this.state.validationErrors.username.message
               }
@@ -85,7 +107,7 @@ class SignUp extends Component {
             <Input
               id={"password"}
               label={"Password"}
-              type={"text"}
+              type={"password"}
               placeholder={"Enter password"}
               validationError={
                 this.state.validationErrors.password &&

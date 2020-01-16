@@ -14,6 +14,7 @@ export function deleteUser(id) {
   return Axios.delete("/users/" + id);
 }
 
+// for creating new user(Sign up) or editing user info
 export function saveUser(user) {
   // if _id is present then its a PUT request, otherwise its a POST
   if (user._id) {

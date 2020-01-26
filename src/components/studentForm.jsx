@@ -177,7 +177,7 @@ class StudentForm extends Component {
                 rows="3"
                 onChange={this.handleChange}
                 value={this.state.data.address}
-                validationError={this.state.validationErrors["address"]}
+                //validationError={this.state.validationErrors["address"]}
               ></textarea>
             </div>
             <button type="submit" className="btn btn-primary">

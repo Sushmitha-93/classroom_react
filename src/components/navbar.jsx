@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { getCurrentUser } from "../services/authService";
 
 const NavBar = () => {
+  // Getting user form JWT in local storage. It is undefined if nothing is there.
   const user = getCurrentUser();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <Link className="navbar-brand" to="/">

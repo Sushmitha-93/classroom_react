@@ -44,7 +44,7 @@ class SignUp extends Component {
         const errobj = _.keyBy(
           _.map(err.inner, o => _.pick(o, ["path", "message"])),
           "path"
-        );        
+        );
         console.log(errobj);
 
         this.setState({ validationErrors: errobj });
@@ -55,9 +55,14 @@ class SignUp extends Component {
       // 3. Send request to save new user
       await saveUser(user)
         .then(res => {
+          // 1) set validationErrors state to empty object. We dont want any errors to display anymore.
           this.setState({ validationErrors: {} });
+
           // if you want to use any custom headers sent in response at client side, "access-control-expose-headers" should be set in response
+          // 2) Get JWT from header
           setJwt(res.headers["x-jwt"]);
+
+          // 3) Refresh the app page. It will take to home page and reflects data from JWT.
           window.location = "/";
         })
         .catch(err => {
@@ -71,7 +76,8 @@ class SignUp extends Component {
           }
         });
     } catch (e) {
-      console.log("trycatch error:", e);
+      // (because we throw error in yup validation)
+      console.log("trycatch error :", e);
     }
   };
 

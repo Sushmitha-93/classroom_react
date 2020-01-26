@@ -9,18 +9,32 @@ import NavBar from "./components/navbar";
 import LoginForm from "./components/loginForm";
 import SignUp from "./components/signupForm";
 import Logout from "./components/logout";
+import LeftSideBar from "./components/sidebarOnLeft";
+import RightSideBar from "./components/sidebarOnRight";
 
 function App() {
   return (
     <React-Fragment>
       <NavBar />
-      <Switch>
-        <Route path="/" exact component={Students} />
-        <Route path="/studentForm/:id" component={StudentForm} />
-        <Route path="/loginForm" component={LoginForm} />
-        <Route path="/signupForm" component={SignUp} />
-        <Route path="/logout" component={Logout} />
-      </Switch>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-2 pl-0">
+            <LeftSideBar />
+          </div>
+          <div className="col-8">
+            <Switch>
+              <Route path="/" exact component={Students} />
+              <Route path="/studentForm/:id" component={StudentForm} />
+              <Route path="/loginForm" component={LoginForm} />
+              <Route path="/signupForm" component={SignUp} />
+              <Route path="/logout" component={Logout} />
+            </Switch>
+          </div>
+          <div className="col-2">
+            <RightSideBar />
+          </div>
+        </div>
+      </div>
     </React-Fragment>
   );
 }

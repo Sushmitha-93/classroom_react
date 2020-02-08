@@ -58,9 +58,6 @@ class Students extends Component {
             rowEditLink={"/studentForm/"}
             cols={this.state.cols}
             onDelete={this.handleDelete}
-            onSort={this.handleSort}
-            sort={this.state.sort}
-            onSearch={this.handleSearch}
           />
         </div>
       </React.Fragment>

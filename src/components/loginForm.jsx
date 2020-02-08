@@ -78,7 +78,7 @@ class LoginForm extends Component {
       <div className="row justify-content-center">
         <div className="col-md-5">
           <br />
-          <h1 className="text-center">Student Form</h1>
+          <h1 className="text-center">Login Form</h1>
           <form onSubmit={this.handleSubmit}>
             <Input
               id={"email"}

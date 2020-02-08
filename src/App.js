@@ -11,6 +11,8 @@ import SignUp from "./components/signupForm";
 import Logout from "./components/logout";
 import LeftSideBar from "./components/sidebarOnLeft";
 import RightSideBar from "./components/sidebarOnRight";
+import Teachers from "./components/teachers";
+import Profile from "./components/profile";
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
           <div className="col-8">
             <Switch>
               <Route path="/" exact component={Students} />
+              <Route path="/students" component={Students} />
+              <Route path="/teachers" component={Teachers} />
+              <Route path="/profile" component={Profile} />
               <Route path="/studentForm/:id" component={StudentForm} />
               <Route path="/loginForm" component={LoginForm} />
               <Route path="/signupForm" component={SignUp} />

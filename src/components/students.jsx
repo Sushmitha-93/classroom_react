@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import { getStudents, deleteStudent } from "../services/studentServices";
 import { Link } from "react-router-dom";
 import _ from "lodash";
-import StudentTable from "./studentTable";
-import Pagination from "./pagination";
+import Table from "./table";
 
 class Students extends Component {
   state = {
     students: [],
-    pageSize: 10,
-    currentPage: 1,
-    sort: { column: "rollno", order: "asc" },
-    search: { path: "", value: "" }
+
+    cols: [
+      { label: "Roll", path: "rollno" },
+      { label: "Name", path: "name" },
+      { label: "Class", path: "class" }
+    ]
   };
 
   async componentDidMount() {
@@ -35,50 +36,7 @@ class Students extends Component {
     }
   };
 
-  handlePageChange = page => {
-    this.setState({ currentPage: page });
-  };
-
-  handleSort = sort => {
-    this.setState({ sort });
-  };
-
-  handleSearch = search => {
-    this.setState({ search });
-  };
-
-  getPageData = () => {
-    const { students, sort, search } = this.state;
-
-    //FILTER by Search value
-    let filteredStudents;
-    if (search.value !== "")
-      filteredStudents = students.filter(
-        stud =>
-          stud[search.path]
-            .toString()
-            .toLowerCase()
-            .search(search.value.toLowerCase()) >= 0
-      );
-    else filteredStudents = students;
-
-    //SORT
-    const sortedStudents = _.orderBy(
-      filteredStudents,
-      [sort.column],
-      [sort.order]
-    );
-
-    // PAGINATE
-    const startIndex = (this.state.currentPage - 1) * this.state.pageSize;
-    const endIndex = startIndex + this.state.pageSize;
-    return _.slice(sortedStudents, startIndex, endIndex);
-  };
-
   render() {
-    const students = this.getPageData();
-    const { currentPage } = this.state;
-
     return (
       <React.Fragment>
         <div className="container">
@@ -95,19 +53,14 @@ class Students extends Component {
             </div>
           </div>
 
-          <StudentTable
-            students={students}
+          <Table
+            rows={this.state.students}
+            rowEditLink={"/studentForm/"}
+            cols={this.state.cols}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
             sort={this.state.sort}
             onSearch={this.handleSearch}
-          />
-
-          <Pagination
-            currentPage={currentPage}
-            totalRecordsCount={this.state.students.length}
-            pageSize={this.state.pageSize}
-            onPageChange={this.handlePageChange}
           />
         </div>
       </React.Fragment>

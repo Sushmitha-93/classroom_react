@@ -8,7 +8,7 @@ class Table extends Component {
   state = {
     pageSize: 10,
     currentPage: 1,
-    sort: { column: "rollno", order: "asc" },
+    sort: this.props.sort,
     search: { path: "", value: "" }
   };
 

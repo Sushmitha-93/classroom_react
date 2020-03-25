@@ -13,6 +13,7 @@ import LeftSideBar from "./components/sidebarOnLeft";
 import RightSideBar from "./components/sidebarOnRight";
 import Teachers from "./components/teachers";
 import Profile from "./components/profile";
+import AwardMarks from "./components/awardMarks";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/loginForm" component={LoginForm} />
               <Route path="/signupForm" component={SignUp} />
               <Route path="/logout" component={Logout} />
+              <Route path="/awardMarks" component={AwardMarks} />
             </Switch>
           </div>
           <div className="col-2">

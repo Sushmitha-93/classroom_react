@@ -35,15 +35,16 @@ class LeftSideBar extends Component {
           >
             Profile
           </Link>
-          <a className="list-group-item list-group-item-action">Time Table</a>
+          <a className="list-group-item list-group-item-action">Exams / Test</a>
           <div className="submenu pl-3">
-            <a href="#" className="list-group-item list-group-item-action">
-              Class
-            </a>
-            <a href="#" className="list-group-item list-group-item-action">
-              Exam / Tests
-            </a>
+            <Link
+            to="/awardMarks"
+            className="list-group-item list-group-item-action"
+          >
+            Award Marks
+          </Link>           
           </div>
+         
           <Link
             to="/assignments"
             className="list-group-item list-group-item-action"

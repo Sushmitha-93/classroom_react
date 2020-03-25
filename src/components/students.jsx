@@ -12,7 +12,8 @@ class Students extends Component {
       { label: "Roll", path: "rollno" },
       { label: "Name", path: "name" },
       { label: "Class", path: "class" }
-    ]
+    ], 
+    sort:{ column: "rollno", order: "asc" }
   };
 
   async componentDidMount() {
@@ -58,6 +59,7 @@ class Students extends Component {
             rowEditLink={"/studentForm/"}
             cols={this.state.cols}
             onDelete={this.handleDelete}
+            sort={this.state.sort}
           />
         </div>
       </React.Fragment>

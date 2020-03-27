@@ -13,7 +13,7 @@ import LeftSideBar from "./components/sidebarOnLeft";
 import RightSideBar from "./components/sidebarOnRight";
 import Teachers from "./components/teachers";
 import Profile from "./components/profile";
-import AwardMarks from "./components/awardMarks";
+import AwardMarks from "./components/AwardMarks/awardMarks";
 
 function App() {
   return (

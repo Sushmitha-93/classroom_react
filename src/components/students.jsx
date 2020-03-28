@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { getStudents, deleteStudent } from "../services/studentServices";
 import { Link } from "react-router-dom";
 import _ from "lodash";
+
+import { getStudents, deleteStudent } from "../services/studentServices";
+
 import Table from "./table";
 
 class Students extends Component {
@@ -12,8 +14,8 @@ class Students extends Component {
       { label: "Roll", path: "rollno" },
       { label: "Name", path: "name" },
       { label: "Class", path: "class" }
-    ], 
-    sort:{ column: "rollno", order: "asc" }
+    ],
+    sort: { column: "rollno", order: "asc" }
   };
 
   async componentDidMount() {

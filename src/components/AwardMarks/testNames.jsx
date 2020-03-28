@@ -1,6 +1,11 @@
 import React from "react";
 
-const TestNames = ({ testNames, onTestSelect, testSelected }) => {
+const TestNames = ({
+  testNames,
+  onTestSelect,
+  testSelected,
+  handleNewTestName
+}) => {
   return (
     <ul className="list-group">
       {testNames.map(name => (
@@ -15,7 +20,15 @@ const TestNames = ({ testNames, onTestSelect, testSelected }) => {
           {name}
         </li>
       ))}
-      <li className="list-group-item list-group-item-action">+ Add New item</li>
+      <li className="list-group-item list-group-item-action">
+        <form onSubmit={handleNewTestName}>
+          <input
+            class="form-control"
+            placeholder="+ Add New item"
+            id="newTest"
+          />
+        </form>
+      </li>
     </ul>
   );
 };

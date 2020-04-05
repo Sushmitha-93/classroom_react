@@ -13,7 +13,7 @@ import LeftSideBar from "./components/sidebarOnLeft";
 import RightSideBar from "./components/sidebarOnRight";
 import Teachers from "./components/teachers";
 import Profile from "./components/profile";
-import AwardMarks from "./components/AwardMarks/awardMarks";
+import MarksSheet from "./components/MarksSheet/marksSheet";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
               <Route path="/loginForm" component={LoginForm} />
               <Route path="/signupForm" component={SignUp} />
               <Route path="/logout" component={Logout} />
-              <Route path="/awardMarks" component={AwardMarks} />
+              <Route path="/marksSheet" component={MarksSheet} />
             </Switch>
           </div>
           <div className="col-2">

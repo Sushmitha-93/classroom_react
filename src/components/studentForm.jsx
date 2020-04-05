@@ -74,7 +74,7 @@ class StudentForm extends Component {
     } catch (err) {
       // to handle 400 error when existing rollno is given by user
       console.log("Error response on Submit: ", err.response);
-      if (err.response.data.includes("rollno_1 dup key"))
+      if (err.response.data.includes("dup key"))
         this.setState({
           responseError: "Roll no exists. Try different number"
         });

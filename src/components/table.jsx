@@ -124,28 +124,42 @@ class Table extends Component {
               <td>{row.name}</td>
               <td>{row.class}</td> */}
                 {cols.map(c => (
-                  <td>{row[c.path]}</td>
+                  <td>
+                    {typeof row[c.path] === "undefined" ? (
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter score"
+                      />
+                    ) : (
+                      row[c.path]
+                    )}
+                  </td>
                 ))}
-                <td>
-                  <button
-                    type="button"
-                    className="close"
-                    data-toggle="tooltip"
-                    title="Delete"
-                    onClick={() => this.props.onDelete(row)}
-                  >
-                    &times;
-                  </button>
-                </td>
-                <td>
-                  <Link
-                    to={this.props.rowEditLink + row._id}
-                    data-toggle="tooltip"
-                    title="Edit"
-                  >
-                    <i className="fas fa-user-edit"></i>
-                  </Link>
-                </td>
+                {typeof this.props.rowEditLink === "undefined" || (
+                  <div>
+                    <td>
+                      <button
+                        type="button"
+                        className="close"
+                        data-toggle="tooltip"
+                        title="Delete"
+                        onClick={() => this.props.onDelete(row)}
+                      >
+                        &times;
+                      </button>
+                    </td>
+                    <td>
+                      <Link
+                        to={this.props.rowEditLink + row._id}
+                        data-toggle="tooltip"
+                        title="Edit"
+                      >
+                        <i className="fas fa-user-edit"></i>
+                      </Link>
+                    </td>
+                  </div>
+                )}
               </tr>
             ))}
           </tbody>

@@ -7,3 +7,7 @@ export function getTests(test) {
 export function postTests(test) {
   return http.post("/tests", test);
 }
+
+export function updateTest(id, test) {
+  return http.put("/tests/" + id, test);
+}

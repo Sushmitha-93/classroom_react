@@ -1,6 +1,7 @@
 import React from "react";
 
 const TestNames = ({
+  testsForMonth,
   testNames,
   onTestSelect,
   testSelected,
@@ -8,16 +9,16 @@ const TestNames = ({
 }) => {
   return (
     <ul className="list-group">
-      {testNames.map(name => (
+      {testsForMonth.map(test => (
         <li
           className={
-            name === testSelected
+            test.name === testSelected.name
               ? "list-group-item list-group-item-action active"
               : "list-group-item list-group-item-action"
           }
-          onClick={() => onTestSelect(name)}
+          onClick={() => onTestSelect(test)}
         >
-          {name}
+          {test.name}
         </li>
       ))}
       <li className="list-group-item list-group-item-action">

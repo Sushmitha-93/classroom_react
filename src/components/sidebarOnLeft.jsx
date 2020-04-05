@@ -38,13 +38,13 @@ class LeftSideBar extends Component {
           <a className="list-group-item list-group-item-action">Exams / Test</a>
           <div className="submenu pl-3">
             <Link
-            to="/awardMarks"
-            className="list-group-item list-group-item-action"
-          >
-            Award Marks
-          </Link>           
+              to="/marksSheet"
+              className="list-group-item list-group-item-action"
+            >
+              Marks Sheet
+            </Link>
           </div>
-         
+
           <Link
             to="/assignments"
             className="list-group-item list-group-item-action"

@@ -31,7 +31,9 @@ const Filter = ({ handleSubmit }) => {
         Month
       </label>
       <select className="custom-select my-1 mr-sm-2" id="monthSelect">
-        <option defaultValue>Choose...</option>
+        <option defaultValue value="">
+          Choose...
+        </option>
         {months.map(m => (
           <option value={m}>{m}</option>
         ))}

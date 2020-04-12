@@ -7,10 +7,10 @@ class MarksTable extends Component {
     cols: [
       { label: "Roll", path: "rollno" },
       { label: "Name", path: "name" },
-      { label: `Marks / ${this.props.testSelected.maxMarks}`, path: "marks" }
+      { label: `Marks / ${this.props.testSelected.maxMarks}`, path: "marks" },
     ],
     sort: { column: "rollno", order: "asc" },
-    students: []
+    students: [],
   };
   async componentDidMount() {
     const response = await getStudents(
@@ -33,6 +33,8 @@ class MarksTable extends Component {
           rows={this.state.students}
           cols={this.state.cols}
           sort={this.state.sort}
+          subName={subjectSelected}
+          testId={testSelected._id}
         />
       </React.Fragment>
     );

@@ -4,15 +4,17 @@ import _ from "lodash";
 
 import Pagination from "./pagination";
 
+const ObjectId = require("mongodb").ObjectID;
+
 class Table extends Component {
   state = {
     pageSize: 10,
     currentPage: 1,
     sort: this.props.sort,
-    search: { path: "", value: "" }
+    search: { path: "", value: "" },
   };
 
-  raiseSort = col => {
+  raiseSort = (col) => {
     const { sort } = this.state;
     if (col === sort.column) sort.order = sort.order === "asc" ? "desc" : "asc";
     else {
@@ -22,22 +24,22 @@ class Table extends Component {
     this.handleSort(sort);
   };
 
-  renderSortIcon = col => {
+  renderSortIcon = (col) => {
     const { sort } = this.state;
     if (col === sort.column)
       if (sort.order === "asc") return <i className="fas fa-sort-up" />;
       else return <i className="fas fa-sort-down" />;
   };
 
-  handlePageChange = page => {
+  handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
-  handleSort = sort => {
+  handleSort = (sort) => {
     this.setState({ sort });
   };
 
-  handleSearch = search => {
+  handleSearch = (search) => {
     this.setState({ search });
   };
 
@@ -49,7 +51,7 @@ class Table extends Component {
     let filteredStudents;
     if (search.value !== "")
       filteredStudents = rows.filter(
-        stud =>
+        (stud) =>
           stud[search.path]
             .toString()
             .toLowerCase()
@@ -73,15 +75,15 @@ class Table extends Component {
   };
 
   render() {
-    const { cols } = this.props;
+    const { cols, subName, testId } = this.props;
     const rows = this.getPageData();
-
+    let result;
     return (
       <React.Fragment>
         <table className="table">
           <thead>
             <tr>
-              {cols.map(col => (
+              {cols.map((col) => (
                 <th
                   style={{ cursor: "pointer" }}
                   data-toggle="tooltip"
@@ -100,16 +102,16 @@ class Table extends Component {
           </thead>
           <tbody>
             <tr>
-              {cols.map(col => (
+              {cols.map((col) => (
                 <td key={col.path}>
                   <input
                     className="form-control"
                     type="text"
                     placeholder="Search"
-                    onChange={e =>
+                    onChange={(e) =>
                       this.handleSearch({
                         path: col.path,
-                        value: e.currentTarget.value
+                        value: e.currentTarget.value,
                       })
                     }
                   />
@@ -118,18 +120,27 @@ class Table extends Component {
               <td></td>
               <td></td>
             </tr>
-            {rows.map(row => (
+            {rows.map((row) => (
               <tr key={row._id}>
                 {/* <td>{row.rollno}</td>
               <td>{row.name}</td>
               <td>{row.class}</td> */}
-                {cols.map(c => (
+                {cols.map((c) => (
                   <td>
                     {typeof row[c.path] === "undefined" ? (
                       <input
                         className="form-control"
                         type="text"
-                        placeholder="Enter score"
+                        placeholder={
+                          console.log(row.marksSheet + "\n" + row.testId) ||
+                          row.marksSheet.length === 0 ||
+                          ((result = _.find(row.marksSheet, {
+                            testId: testId,
+                          })) &&
+                            typeof result === "undefined") ||
+                          typeof result === "undefined" ||
+                          (result = result.testScores[subName])
+                        }
                       />
                     ) : (
                       row[c.path]

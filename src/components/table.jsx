@@ -4,8 +4,6 @@ import _ from "lodash";
 
 import Pagination from "./pagination";
 
-const ObjectId = require("mongodb").ObjectID;
-
 class Table extends Component {
   state = {
     pageSize: 10,
@@ -74,6 +72,11 @@ class Table extends Component {
     return _.slice(sortedStudents, startIndex, endIndex);
   };
 
+  renderCell = (row, col) => {
+    if (col.content) return col.content(row);
+    else return row[col.path];
+  };
+
   render() {
     const { cols, subName, testId } = this.props;
     const rows = this.getPageData();
@@ -125,27 +128,8 @@ class Table extends Component {
                 {/* <td>{row.rollno}</td>
               <td>{row.name}</td>
               <td>{row.class}</td> */}
-                {cols.map((c) => (
-                  <td>
-                    {typeof row[c.path] === "undefined" ? (
-                      <input
-                        className="form-control"
-                        type="text"
-                        placeholder={
-                          console.log(row.marksSheet + "\n" + row.testId) ||
-                          row.marksSheet.length === 0 ||
-                          ((result = _.find(row.marksSheet, {
-                            testId: testId,
-                          })) &&
-                            typeof result === "undefined") ||
-                          typeof result === "undefined" ||
-                          (result = result.testScores[subName])
-                        }
-                      />
-                    ) : (
-                      row[c.path]
-                    )}
-                  </td>
+                {cols.map((col) => (
+                  <td>{this.renderCell(row, col)}</td>
                 ))}
                 {typeof this.props.rowEditLink === "undefined" || (
                   <div>

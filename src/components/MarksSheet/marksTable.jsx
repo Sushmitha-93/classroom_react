@@ -1,13 +1,24 @@
 import React, { Component } from "react";
 import { getStudents } from "../../services/studentServices";
 import Table from "../table";
+import StudMarksCol from "./studMarksCol";
 
 class MarksTable extends Component {
   state = {
     cols: [
       { label: "Roll", path: "rollno" },
       { label: "Name", path: "name" },
-      { label: `Marks / ${this.props.testSelected.maxMarks}`, path: "marks" },
+      {
+        label: `Marks / ${this.props.testSelected.maxMarks}`,
+        path: "marks",
+        content: (student) => (
+          <StudMarksCol
+            student={student}
+            testId={this.props.testSelected._id}
+            subName={this.props.subjectSelected}
+          />
+        ),
+      },
     ],
     sort: { column: "rollno", order: "asc" },
     students: [],

@@ -105,21 +105,24 @@ class Table extends Component {
           </thead>
           <tbody>
             <tr>
-              {cols.map((col) => (
-                <td key={col.path}>
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="Search"
-                    onChange={(e) =>
-                      this.handleSearch({
-                        path: col.path,
-                        value: e.currentTarget.value,
-                      })
-                    }
-                  />
-                </td>
-              ))}
+              {cols.map(
+                (col) =>
+                  typeof col.path === "undefined" || (
+                    <td key={col.path}>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Search"
+                        onChange={(e) =>
+                          this.handleSearch({
+                            path: col.path,
+                            value: e.currentTarget.value,
+                          })
+                        }
+                      />
+                    </td>
+                  )
+              )}
               <td></td>
               <td></td>
             </tr>
@@ -131,30 +134,6 @@ class Table extends Component {
                 {cols.map((col) => (
                   <td>{this.renderCell(row, col)}</td>
                 ))}
-                {typeof this.props.rowEditLink === "undefined" || (
-                  <div>
-                    <td>
-                      <button
-                        type="button"
-                        className="close"
-                        data-toggle="tooltip"
-                        title="Delete"
-                        onClick={() => this.props.onDelete(row)}
-                      >
-                        &times;
-                      </button>
-                    </td>
-                    <td>
-                      <Link
-                        to={this.props.rowEditLink + row._id}
-                        data-toggle="tooltip"
-                        title="Edit"
-                      >
-                        <i className="fas fa-user-edit"></i>
-                      </Link>
-                    </td>
-                  </div>
-                )}
               </tr>
             ))}
           </tbody>

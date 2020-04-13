@@ -13,9 +13,35 @@ class Students extends Component {
     cols: [
       { label: "Roll", path: "rollno" },
       { label: "Name", path: "name" },
-      { label: "Class", path: "class" }
+      { label: "Class", path: "class" },
+      {
+        label: "",
+        content: (student) => (
+          <button
+            type="button"
+            className="close"
+            data-toggle="tooltip"
+            title="Delete"
+            onClick={() => this.handleDelete(student)}
+          >
+            &times;
+          </button>
+        ),
+      },
+      {
+        label: "",
+        content: (student) => (
+          <Link
+            to={"/studentForm/" + student._id}
+            data-toggle="tooltip"
+            title="Edit"
+          >
+            <i className="fas fa-user-edit"></i>
+          </Link>
+        ),
+      },
     ],
-    sort: { column: "rollno", order: "asc" }
+    sort: { column: "rollno", order: "asc" },
   };
 
   async componentDidMount() {
@@ -25,10 +51,12 @@ class Students extends Component {
     this.setState({ students: response.data });
   }
 
-  handleDelete = async student => {
+  handleDelete = async (student) => {
     console.log("Handle delete: ", student);
     const originalStudents = this.state.students;
-    const students = originalStudents.filter(stud => stud._id !== student._id);
+    const students = originalStudents.filter(
+      (stud) => stud._id !== student._id
+    );
     this.setState({ students });
 
     try {

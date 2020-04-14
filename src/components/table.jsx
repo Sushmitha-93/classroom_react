@@ -78,7 +78,7 @@ class Table extends Component {
   };
 
   render() {
-    const { cols, subName, testId } = this.props;
+    const { cols } = this.props;
     const rows = this.getPageData();
     let result;
     return (

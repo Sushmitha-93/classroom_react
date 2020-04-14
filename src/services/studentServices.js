@@ -21,7 +21,16 @@ export function saveStudent(student) {
       class: student.class,
       phone: student.phone,
       gender: student.gender,
-      address: student.address
+      address: student.address,
     });
   } else return http.post("/students/", student);
+}
+
+export function saveStudTestMarks(testObj) {
+  return http.put("/students/marksSheet", {
+    studId: testObj.studId,
+    testId: testObj.testId,
+    subName: testObj.subName,
+    marks: testObj.marks,
+  });
 }

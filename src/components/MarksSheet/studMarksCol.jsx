@@ -1,8 +1,24 @@
 import React from "react";
 import _ from "lodash";
+import { saveStudTestMarks } from "../../services/studentServices";
 
 const StudMarksCol = ({ student, testId, subName }) => {
   let result;
+
+  async function saveStudMarks(marks) {
+    //console.log(e.currentTarget.value);
+
+    console.log(marks);
+
+    let saveResult = await saveStudTestMarks({
+      studId: student._id,
+      testId: testId,
+      subName: subName,
+      marks: marks,
+    });
+    console.log(saveResult);
+  }
+
   return (
     <input
       className="form-control"
@@ -16,6 +32,7 @@ const StudMarksCol = ({ student, testId, subName }) => {
         typeof result === "undefined" ||
         result.testScores[subName]
       }
+      onBlur={(e) => saveStudMarks(e.currentTarget.value)}
     />
   );
 };

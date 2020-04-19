@@ -20,6 +20,7 @@ class MarksSheet extends Component {
     subjectSelected: "",
     branches: [],
     subsForSem: [],
+    newSubSubmitFlag: true,
   };
 
   componentDidMount = async () => {
@@ -62,6 +63,10 @@ class MarksSheet extends Component {
 
   handleSubjectSelect = (subject) => {
     this.setState({ subjectSelected: subject });
+  };
+
+  handleNewSubListOnChange = () => {
+    this.setState({ newSubSubmitFlag: false });
   };
 
   handleNewTestName = async (e) => {
@@ -152,7 +157,9 @@ class MarksSheet extends Component {
                       subsForSem={this.state.subsForSem}
                       testSelected={this.state.testSelected}
                       handleNewSubject={this.handleNewSubject}
+                      onNewSubListSelect={this.handleNewSubListOnChange}
                       onSubSelect={this.handleSubjectSelect}
+                      newSubSubmitFlag={this.state.newSubSubmitFlag}
                     />
                   )}
                 </div>

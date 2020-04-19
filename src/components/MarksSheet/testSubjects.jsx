@@ -5,6 +5,8 @@ const TestSubjects = ({
   handleNewSubject,
   onSubSelect,
   subsForSem,
+  onNewSubListSelect,
+  newSubSubmitFlag,
 }) => {
   const subjects =
     Object.keys(testSelected).length === 0 ? [] : testSelected.subjects;
@@ -24,16 +26,18 @@ const TestSubjects = ({
           <select
             className="form-control"
             id="newSubject"
-            onChange={() => console.log("onchange select")}
+            onChange={onNewSubListSelect}
           >
             <option defaultValue>+ Add New item</option>
             {subsForSem.map((sub) => (
               <option>{sub}</option>
             ))}
           </select>
-          <button type="submit" className="btn btn-primary mt-2 float-right">
-            + Add
-          </button>
+          {newSubSubmitFlag || (
+            <button type="submit" className="btn btn-primary mt-2 float-right">
+              + Add
+            </button>
+          )}
         </form>
       </li>
     </ul>

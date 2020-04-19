@@ -6,7 +6,7 @@ import StudMarksCol from "./studMarksCol";
 class MarksTable extends Component {
   state = {
     cols: [
-      { label: "Roll", path: "rollno" },
+      { label: "USN", path: "USN" },
       { label: "Name", path: "name" },
       {
         label: `Marks / ${this.props.testSelected.maxMarks}`,
@@ -20,12 +20,12 @@ class MarksTable extends Component {
         ),
       },
     ],
-    sort: { column: "rollno", order: "asc" },
+    sort: { column: "USN", order: "asc" },
     students: [],
   };
   async componentDidMount() {
     const response = await getStudents(
-      `?class=${this.props.testSelected.class}`
+      `?branch=${this.props.testSelected.branch}`
     ); // get students in that class
     this.setState({ students: response.data });
   }

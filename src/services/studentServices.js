@@ -17,8 +17,10 @@ export function saveStudent(student) {
   if (student._id) {
     return http.put("/students/" + student._id, {
       name: student.name,
-      rollno: student.rollno,
-      class: student.class,
+      branch: student.branch,
+      sem: student.sem,
+      section: student.section,
+      USN: student.USN,
       phone: student.phone,
       gender: student.gender,
       address: student.address,

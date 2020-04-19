@@ -14,6 +14,7 @@ import RightSideBar from "./components/sidebarOnRight";
 import Teachers from "./components/teachers";
 import Profile from "./components/profile";
 import MarksSheet from "./components/MarksSheet/marksSheet";
+import StudentMarksSheet from "./components/studentMarksSheet";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           </div>
           <div className="col-8">
             <Switch>
-              <Route path="/" exact component={Students} />
+              <Route exact path="/" component={Students} />
               <Route path="/students" component={Students} />
               <Route path="/teachers" component={Teachers} />
               <Route path="/profile" component={Profile} />
@@ -34,7 +35,12 @@ function App() {
               <Route path="/loginForm" component={LoginForm} />
               <Route path="/signupForm" component={SignUp} />
               <Route path="/logout" component={Logout} />
-              <Route path="/marksSheet" component={MarksSheet} />
+              <Route
+                exact
+                path="/marksSheet"
+                render={() => <MarksSheet key={Math.random()} />}
+              />
+              <Route path="/studentMarksSheet" component={StudentMarksSheet} />
             </Switch>
           </div>
           <div className="col-2">

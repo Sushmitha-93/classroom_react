@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import _ from "lodash";
 
 import { getStudents, deleteStudent } from "../services/studentServices";
 
@@ -11,9 +10,9 @@ class Students extends Component {
     students: [],
 
     cols: [
-      { label: "Roll", path: "rollno" },
+      { label: "USN", path: "USN" },
       { label: "Name", path: "name" },
-      { label: "Class", path: "class" },
+      { label: "Branch", path: "branch" },
       {
         label: "",
         content: (student) => (

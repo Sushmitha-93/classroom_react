@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { saveStudent, getStudent } from "../services/studentServices";
+import { getBranches } from "../services/brancheService";
 import * as yup from "yup";
 import Input from "./FormComponents/input";
 
@@ -7,48 +8,35 @@ class StudentForm extends Component {
   state = {
     data: {
       name: "",
-      rollno: "",
-      class: "",
+      branch: "",
+      sem: "",
+      section: "",
+      USN: "",
       gender: "",
       phone: "",
-      address: ""
+      address: "",
     },
     responseError: "",
-    validationErrors: {}
+    validationErrors: {},
+    branches: [],
   };
 
   // Dont define schema as a Yup Schema. Because we will be doing that in handleChange(),
   // to create Yup schema object for each property. So, just define a plain object.
   schema = {
-    name: yup
-      .string()
-      .required("Name is required")
-      .label("Name"),
-    rollno: yup
-      .number()
-      .typeError("Roll must be a number")
-      .required()
-      .label("Roll no."),
-    class: yup
-      .string("Class is required")
-      .required()
-      .label("Class"),
-    gender: yup
-      .string()
-      .required()
-      .label("Gender"),
-    phone: yup
-      .string()
-      .required("Phone is required")
-      .label("Phone"),
-    address: yup
-      .string()
-      .required("Address is required")
-      .label("Address")
+    name: yup.string().required("Name is required").label("Name"),
+    branch: yup.string().required("Select branch").label("Branch"),
+    sem: yup.string().required("Select semester").label("Semester"),
+    USN: yup.string().required("Enter USN").label("USN"),
+    gender: yup.string().required().label("Gender"),
+    phone: yup.string().required("Phone is required").label("Phone"),
+    address: yup.string().required("Address is required").label("Address"),
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.populateStudent();
+    let branches = await getBranches();
+    this.setState({ branches: branches.data });
   }
 
   // Populate based on id in URL. If it is 'new' or 'student id'
@@ -61,7 +49,7 @@ class StudentForm extends Component {
     this.setState({ data: student });
   };
 
-  handleSubmit = async e => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Handle submit");
     console.log(this.state.data);
@@ -76,13 +64,13 @@ class StudentForm extends Component {
       console.log("Error response on Submit: ", err.response);
       if (err.response.data.includes("dup key"))
         this.setState({
-          responseError: "Roll no exists. Try different number"
+          responseError: "USN exists",
         });
       else this.setState({ responseError: err.response.data });
     }
   };
 
-  handleChange = async e => {
+  handleChange = async (e) => {
     const { id, value } = e.currentTarget;
     const { validationErrors } = this.state;
     // yup browser form validation
@@ -92,7 +80,7 @@ class StudentForm extends Component {
     await schema
       .validate(obj)
       .then(delete validationErrors[id])
-      .catch(error => {
+      .catch((error) => {
         //console.log("yup validation result:", error);
         const errorMsg = error.errors[0]; // not doing set state here
         console.log("Yup validation error: ", errorMsg);
@@ -125,26 +113,50 @@ class StudentForm extends Component {
               value={this.state.data.name}
               validationError={this.state.validationErrors["name"]}
             />
+            <div className="form-group">
+              <label htmlFor="branch">Branch</label>
+              <select
+                className="form-control"
+                id="branch"
+                onChange={this.handleChange}
+                value={this.state.data.branch}
+              >
+                <option defaultValue>Select Branch</option>
+                {this.state.branches.map((b) => (
+                  <option>{b.name}</option>
+                ))}
+              </select>
+            </div>
             <div className="form-row">
               <Input
                 className={"form-group col"}
-                id={"class"}
-                label={"Class"}
+                id={"sem"}
+                label={"Semester"}
                 type={"text"}
-                placeholder={"Enter class"}
+                placeholder={"Enter Sem"}
                 onChange={this.handleChange}
-                value={this.state.data.class}
-                validationError={this.state.validationErrors["class"]}
+                value={this.state.data.sem}
+                validationError={this.state.validationErrors["sem"]}
               />
               <Input
                 className={"form-group col"}
-                id={"rollno"}
-                label={"Roll No."}
+                id={"section"}
+                label={"Section"}
                 type={"text"}
-                placeholder={"Enter roll no."}
+                placeholder={"Enter Section"}
                 onChange={this.handleChange}
-                value={this.state.data.rollno}
-                validationError={this.state.validationErrors["rollno"]}
+                value={this.state.data.section}
+                validationError={this.state.validationErrors["section"]}
+              />
+              <Input
+                className={"form-group col"}
+                id={"USN"}
+                label={"USN"}
+                type={"text"}
+                placeholder={"Enter USN"}
+                onChange={this.handleChange}
+                value={this.state.data.USN}
+                validationError={this.state.validationErrors["USN"]}
               />
             </div>
             <div className="form-group">

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import _ from "lodash";
 
 import { getTests, postTests, updateTest } from "../../services/testService";
+import { getBranches } from "../../services/brancheService";
+import { getSyllabus } from "../../services/syllabusService";
 
 import Filter from "./filter";
 import TestNames from "./testNames";
@@ -10,39 +11,60 @@ import MarksTable from "./marksTable";
 
 class MarksSheet extends Component {
   state = {
-    class: "",
+    branch: "",
+    sem: 0,
+    section: "",
     month: "",
-    testsForMonth: [], //resonse. array of test objects
+    testsForMonth: [], //response. array of test objects
     testSelected: {}, // test object which is now selected {_id: ... ,name: Unit test 1, class:5a, ...}
-    subjectSelected: ""
+    subjectSelected: "",
+    branches: [],
+    subsForSem: [],
   };
-  handleSubmit = async e => {
+
+  componentDidMount = async () => {
+    const branches = await getBranches();
+    this.setState({ branches: branches.data });
+  };
+
+  handleSubmit = async (e) => {
     e.preventDefault();
-    const classNum = e.target.classInput.value;
+    const branch = e.target.branchSelect.value;
+    const sem = e.target.semSelect.value;
+    const section = e.target.sectionInput.value;
     const month = e.target.monthSelect.value;
 
+    const syllabus = await getSyllabus({
+      branch: branch,
+      sem: sem,
+    });
+    let subsForSem = syllabus.data[0].subjects.map((s) => s.name);
+    console.log(syllabus.data);
+
     const response = await getTests({
-      class: classNum,
-      month: month
+      branch: branch,
+      sem: sem,
+      section: section,
+      month: month,
     });
     const testsForMonth = response.data;
-    // console.log(tests);
+    console.log(testsForMonth);
     //console.log(testNames);
 
-    this.setState({ testsForMonth, class: classNum, month, testSelected: {} });
+    this.setState({ testsForMonth, branch, sem, section, month, subsForSem });
   };
 
-  handleTestSelect = test => {
+  handleTestSelect = (test) => {
     this.setState({
-      testSelected: test
+      testSelected: test,
     });
   };
 
-  handleSubjectSelect = subject => {
+  handleSubjectSelect = (subject) => {
     this.setState({ subjectSelected: subject });
   };
 
-  handleNewTestName = async e => {
+  handleNewTestName = async (e) => {
     e.preventDefault();
     const name = e.target.newTest.value; // see below comment
     console.log("name: " + name);
@@ -54,21 +76,25 @@ class MarksSheet extends Component {
 
     const postResponse = await postTests({
       name: name,
-      class: this.state.class,
-      month: this.state.month
+      branch: this.state.branch,
+      sem: this.state.sem,
+      section: this.state.section,
+      month: this.state.month,
     });
     console.log(postResponse);
 
     const getResponse = await getTests({
-      class: this.state.class,
-      month: this.state.month
+      branch: this.state.branch,
+      sem: this.state.sem,
+      section: this.state.section,
+      month: this.state.month,
     });
     this.setState({
-      testsForMonth: getResponse.data
+      testsForMonth: getResponse.data,
     });
   };
 
-  handleNewSubject = async e => {
+  handleNewSubject = async (e) => {
     e.preventDefault();
     const newSubName = e.target.newSubject.value;
     e.target.reset();
@@ -77,16 +103,18 @@ class MarksSheet extends Component {
     subjects.push(newSubName);
 
     const putResponse = await updateTest(this.state.testSelected._id, {
-      subjects: subjects
+      subjects: subjects,
     });
     console.log(putResponse);
 
     const getResponse = await getTests({
-      class: this.state.class,
-      month: this.state.month
+      branch: this.state.branch,
+      sem: this.state.sem,
+      section: this.state.section,
+      month: this.state.month,
     });
     this.setState({
-      testsForMonth: getResponse.data
+      testsForMonth: getResponse.data,
     });
   };
   render() {
@@ -96,16 +124,19 @@ class MarksSheet extends Component {
           <div className="row mt-3">
             <h1 className="ml-3">Marks Sheet</h1>
           </div>
-          {/* Class and Month filter component */}
+          {/* Tests list filter component based on Branch,Sem,Section and month */}
           {this.state.subjectSelected === "" && (
             <div>
-              <Filter handleSubmit={this.handleSubmit} />
+              <Filter
+                handleSubmit={this.handleSubmit}
+                branches={this.state.branches}
+              />
               <br />
               <br />
               <div className="row">
                 {/* List of Test names for class and month selected */}
                 <div className="col-md-3">
-                  {this.state.class === "" || (
+                  {this.state.branch === "" || (
                     <TestNames
                       onTestSelect={this.handleTestSelect}
                       testSelected={this.state.testSelected}
@@ -118,6 +149,7 @@ class MarksSheet extends Component {
                 <div className="col-md-4">
                   {this.state.testsForMonth.length === 0 || (
                     <TestSubjects
+                      subsForSem={this.state.subsForSem}
                       testSelected={this.state.testSelected}
                       handleNewSubject={this.handleNewSubject}
                       onSubSelect={this.handleSubjectSelect}

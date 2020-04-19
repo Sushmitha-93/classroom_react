@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 class LeftSideBar extends Component {
   state = {};
@@ -11,46 +11,49 @@ class LeftSideBar extends Component {
         </div>
 
         <div className="list-group-flush">
-          <Link
-            to="/"
-            className="list-group-item list-group-item-action active"
-          >
+          <Link to="/" className="list-group-item list-group-item-action">
             Home
           </Link>
-          <Link
+          <NavLink
             to="/students"
             className="list-group-item list-group-item-action"
           >
             Students
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/teachers"
             className="list-group-item list-group-item-action"
           >
             Teachers
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/profile"
             className="list-group-item list-group-item-action"
           >
             Profile
-          </Link>
+          </NavLink>
           <a className="list-group-item list-group-item-action">Exams / Test</a>
           <div className="submenu pl-3">
-            <Link
+            <NavLink
               to="/marksSheet"
               className="list-group-item list-group-item-action"
             >
               Marks Sheet
-            </Link>
+            </NavLink>
+            <NavLink
+              to="/studentMarksSheet"
+              className="list-group-item list-group-item-action"
+            >
+              Student Marks Sheet
+            </NavLink>
           </div>
 
-          <Link
+          <NavLink
             to="/assignments"
             className="list-group-item list-group-item-action"
           >
             Assignments
-          </Link>
+          </NavLink>
         </div>
       </React.Fragment>
     );

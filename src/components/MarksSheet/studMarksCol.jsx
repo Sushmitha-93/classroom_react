@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { saveStudTestMarks } from "../../services/studentServices";
 
-const StudMarksCol = ({ student, testId, subName }) => {
+const StudMarksCol = ({ student, testId, testName, subName }) => {
   let result;
 
   async function saveStudMarks(marks) {
@@ -13,6 +13,7 @@ const StudMarksCol = ({ student, testId, subName }) => {
     let saveResult = await saveStudTestMarks({
       studId: student._id,
       testId: testId,
+      testName: testName,
       subName: subName,
       marks: marks,
     });

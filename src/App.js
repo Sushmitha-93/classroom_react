@@ -14,7 +14,7 @@ import RightSideBar from "./components/sidebarOnRight";
 import Teachers from "./components/teachers";
 import Profile from "./components/profile";
 import MarksSheet from "./components/MarksSheet/marksSheet";
-import StudentMarksSheet from "./components/studentMarksSheet";
+import StudentMarksSheet from "./components/StudentMarksSheet/studentMarksSheet";
 
 function App() {
   return (

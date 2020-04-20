@@ -1,20 +1,39 @@
 import React, { Component } from "react";
-import { getStudent } from "../services/studentServices";
+import { getStudent } from "../../services/studentServices";
+import { getTests } from "../../services/testService";
+import { getSyllabus } from "../../services/syllabusService";
 
 class StudentMarksSheet extends Component {
   state = {
     student: {
       marksSheet: [],
     },
+    testNames: [],
+    subNames: [],
   };
 
-  handleSubmit = async (studId) => {
-    const student = await getStudent(studId);
-    this.setState({ student: student.data });
+  handleSubmit = async (studUSN) => {
+    let response = await getStudent({ USN: studUSN });
+    const student = response.data[0];
+
+    response = await getSyllabus({
+      branch: student.branch,
+      sem: student.sem,
+    });
+    const subNames = response.data[0].subjects.map((s) => s.name);
+
+    response = await getTests({
+      branch: student.branch,
+      sem: student.sem,
+      section: student.section,
+    });
+    const testNames = response.data.map((t) => t.name);
+
+    this.setState({ student, subNames, testNames });
   };
 
   render() {
-    const { student } = this.state;
+    const { student, testNames } = this.state;
     return (
       <React.Fragment>
         <div className="container">
@@ -24,17 +43,17 @@ class StudentMarksSheet extends Component {
             className="form-inline"
             onSubmit={(e) => {
               e.preventDefault();
-              this.handleSubmit(e.target.studIdInput.value);
+              this.handleSubmit(e.target.studUSNInput.value);
             }}
           >
             <label className="my-1 mr-3" htmlFor="classInput">
-              Student ID
+              Student USN
             </label>
             <input
               type="text"
               className="form-control col-md-2"
-              id="studIdInput"
-              placeholder="Ex: 123456"
+              id="studUSNInput"
+              placeholder="Ex: 1JS12CS105"
             ></input>
           </form>
 
@@ -43,20 +62,22 @@ class StudentMarksSheet extends Component {
             <div className="card-body">
               <strong>Name: </strong> {student.name}
               &emsp;
-              <strong>Class: </strong>
-              {student.class} &emsp; <strong>Roll no:</strong> {student.rollno}
+              <strong>Branch: </strong>
+              {student.branch} &emsp; <strong>Section: </strong>{" "}
+              {student.section}
             </div>
           </div>
+
           <table className="table table-bordered">
             <thead>
               <tr>
                 <th scope="col">#</th>
-
-                {student.marksSheet.map((testObj) => (
-                  <th scope="col">{testObj.testName}</th>
+                {testNames.map((test) => (
+                  <th scope="col">{test}</th>
                 ))}
               </tr>
             </thead>
+
             <tbody>
               <tr>
                 <th scope="row">1</th>

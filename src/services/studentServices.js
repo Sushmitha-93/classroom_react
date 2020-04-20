@@ -4,8 +4,12 @@ export function getStudents(queryString) {
   return http.get("/students" + (queryString ? queryString : ""));
 }
 
-export function getStudent(studentId) {
-  return http.get("/students/" + studentId);
+export function getStudent(queryObj) {
+  let request = "/students?";
+  Object.keys(queryObj).map(
+    (k) => (request = request + k + "=" + queryObj[k] + "&")
+  );
+  return http.get(request);
 }
 
 export function deleteStudent(movieId) {
@@ -32,6 +36,7 @@ export function saveStudTestMarks(testObj) {
   return http.put("/students/marksSheet", {
     studId: testObj.studId,
     testId: testObj.testId,
+    testName: testObj.testName,
     subName: testObj.subName,
     marks: testObj.marks,
   });

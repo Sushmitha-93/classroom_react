@@ -15,6 +15,7 @@ class MarksTable extends Component {
           <StudMarksCol
             student={student}
             testId={this.props.testSelected._id}
+            testName={this.props.testSelected.name}
             subName={this.props.subjectSelected}
           />
         ),
@@ -36,8 +37,7 @@ class MarksTable extends Component {
     return (
       <React.Fragment>
         <h4>
-          {testSelected.class} - {testSelected.name} ({testSelected.month}) -
-          {subjectSelected}
+          {testSelected.name} ({testSelected.month}) -{subjectSelected}
         </h4>
         <br />
         <Table

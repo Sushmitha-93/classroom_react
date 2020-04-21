@@ -33,7 +33,7 @@ class StudentMarksSheet extends Component {
   };
 
   render() {
-    const { student, testNames } = this.state;
+    const { student, testNames, subNames } = this.state;
     return (
       <React.Fragment>
         <div className="container">
@@ -79,18 +79,14 @@ class StudentMarksSheet extends Component {
             </thead>
 
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
+              {subNames.map((s) => (
+                <tr>
+                  <th>{s}</th>
+                  {testNames.map((t, index) => (
+                    <td>{student.marksSheet[index].testScores[s]}</td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

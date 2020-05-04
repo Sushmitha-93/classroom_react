@@ -58,37 +58,45 @@ class StudentMarksSheet extends Component {
           </form>
 
           <br />
-          <div className="card">
-            <div className="card-body">
-              <strong>Name: </strong> {student.name}
-              &emsp;
-              <strong>Branch: </strong>
-              {student.branch} &emsp; <strong>Section: </strong>{" "}
-              {student.section}
-            </div>
-          </div>
+          {this.state.testNames.length === 0 || (
+            <div>
+              <div className="card">
+                <div className="card-body">
+                  <strong>Name: </strong> {student.name}
+                  &emsp;
+                  <strong>Branch: </strong>
+                  {student.branch} &emsp; <strong>Section: </strong>{" "}
+                  {student.section}
+                </div>
+              </div>
 
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                {testNames.map((test) => (
-                  <th scope="col">{test}</th>
-                ))}
-              </tr>
-            </thead>
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Subjects </th>
+                    {testNames.map((test) => (
+                      <th scope="col" key={test}>
+                        {test}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
 
-            <tbody>
-              {subNames.map((s) => (
-                <tr>
-                  <th>{s}</th>
-                  {testNames.map((t, index) => (
-                    <td>{student.marksSheet[index].testScores[s]}</td>
+                <tbody>
+                  {subNames.map((s) => (
+                    <tr key={s}>
+                      <th>{s}</th>
+                      {testNames.map((t, index) => (
+                        <td key={index}>
+                          {student.marksSheet[index].testScores[s]}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </React.Fragment>
     );

@@ -44,9 +44,9 @@ class StudentForm extends Component {
     const studentId = this.props.match.params.id;
     if (studentId === "new") return;
 
-    const { data: student } = await getStudent(studentId);
+    const { data: student } = await getStudent({ _id: studentId });
     console.log(student);
-    this.setState({ data: student });
+    this.setState({ data: student[0] });
   };
 
   handleSubmit = async (e) => {
@@ -139,7 +139,7 @@ class StudentForm extends Component {
                 validationError={this.state.validationErrors["sem"]}
               />
               <Input
-                className={"form-group col"}
+                className={"form-group col text-capitalize"}
                 id={"section"}
                 label={"Section"}
                 type={"text"}

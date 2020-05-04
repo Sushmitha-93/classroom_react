@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = props => {
+const Input = (props) => {
   const {
     className,
     id,
@@ -9,14 +9,14 @@ const Input = props => {
     placeholder,
     onChange,
     value,
-    validationError
+    validationError,
   } = props;
   return (
     <div className={className || "form-group"}>
       <label htmlFor={id}>{label}</label>
       <input
         type={type}
-        className="form-control"
+        className="form-control text-capitalize"
         id={id}
         placeholder={placeholder}
         onChange={onChange}

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import _ from "lodash";
 
 import Pagination from "./pagination";
@@ -111,6 +110,7 @@ class Table extends Component {
                     <td key={col.path}>
                       <input
                         className="form-control"
+                        key={col.path}
                         type="text"
                         placeholder="Search"
                         onChange={(e) =>

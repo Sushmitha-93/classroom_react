@@ -5,11 +5,11 @@ const TestNames = ({
   testNames,
   onTestSelect,
   testSelected,
-  handleNewTestName
+  handleNewTestName,
 }) => {
   return (
     <ul className="list-group">
-      {testsForMonth.map(test => (
+      {testsForMonth.map((test) => (
         <li
           className={
             test.name === testSelected.name
@@ -24,7 +24,7 @@ const TestNames = ({
       <li className="list-group-item list-group-item-action">
         <form onSubmit={handleNewTestName}>
           <input
-            class="form-control"
+            className="form-control"
             placeholder="+ Add New item"
             id="newTest"
           />

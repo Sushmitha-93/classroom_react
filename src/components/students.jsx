@@ -40,7 +40,7 @@ class Students extends Component {
         ),
       },
     ],
-    sort: { column: "rollno", order: "asc" },
+    sort: { column: "USN", order: "asc" },
   };
 
   async componentDidMount() {

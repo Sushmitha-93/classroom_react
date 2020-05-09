@@ -123,7 +123,7 @@ class StudentForm extends Component {
               >
                 <option defaultValue>Select Branch</option>
                 {this.state.branches.map((b) => (
-                  <option>{b.name}</option>
+                  <option key={b._id}>{b.name}</option>
                 ))}
               </select>
             </div>

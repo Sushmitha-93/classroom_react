@@ -11,10 +11,11 @@ import SignUp from "./components/signupForm";
 import Logout from "./components/logout";
 import LeftSideBar from "./components/sidebarOnLeft";
 import RightSideBar from "./components/sidebarOnRight";
-import Teachers from "./components/teachers";
+import Teachers from "./components/Teacher/teachers";
 import Profile from "./components/profile";
 import MarksSheet from "./components/MarksSheet/marksSheet";
 import StudentMarksSheet from "./components/StudentMarksSheet/studentMarksSheet";
+import TeacherForm from "./components/Teacher/teacherForm";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route exact path="/" component={Students} />
               <Route path="/students" component={Students} />
               <Route path="/teachers" component={Teachers} />
+              <Route path="/teacherForm/:id" component={TeacherForm} />
               <Route path="/profile" component={Profile} />
               <Route path="/studentForm/:id" component={StudentForm} />
               <Route path="/loginForm" component={LoginForm} />

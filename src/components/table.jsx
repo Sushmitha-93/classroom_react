@@ -11,6 +11,12 @@ class Table extends Component {
     search: { path: "", value: "" },
   };
 
+  // function to render data in table body cell
+  renderCell = (row, col) => {
+    if (col.content) return col.content(row);
+    else return row[col.path];
+  };
+
   raiseSort = (col) => {
     const { sort } = this.state;
     if (col === sort.column) sort.order = sort.order === "asc" ? "desc" : "asc";
@@ -71,11 +77,6 @@ class Table extends Component {
     return _.slice(sortedStudents, startIndex, endIndex);
   };
 
-  renderCell = (row, col) => {
-    if (col.content) return col.content(row);
-    else return row[col.path];
-  };
-
   render() {
     const { cols } = this.props;
     const rows = this.getPageData();
@@ -125,6 +126,7 @@ class Table extends Component {
               )}
               <td></td>
               <td></td>
+              {/* End of Search input row (first row) */}
             </tr>
             {rows.map((row) => (
               <tr key={row._id}>

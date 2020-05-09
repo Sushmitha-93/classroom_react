@@ -9,3 +9,7 @@ export function getTeachers(queryObj) {
 
   return http.get(reqString);
 }
+
+export function deleteTeacher(id) {
+  return http.delete("/teachers/" + id);
+}

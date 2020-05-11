@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getBranches } from "../../services/brancheService";
 import { getTeachers } from "../../services/teachersService";
+import AddClass from "./addClassForm";
 
 import Input from "../FormComponents/input";
 
@@ -16,6 +17,7 @@ class TeacherForm extends Component {
       phone: "",
       address: "",
       gender: "",
+      classes: [],
     },
   };
 
@@ -37,39 +39,19 @@ class TeacherForm extends Component {
     let teacher = this.state.teacher;
     return (
       <div className="row justify-content-center">
-        <div className="col-md-5">
+        <div className="col-md-7">
           <h1>
             {this.props.match.params.id === "new" ? "New " : ""}Teacher Form
           </h1>
           <form>
-            <Input
-              id={"name"}
-              label={"Name"}
-              type={"text"}
-              placeholder={"Enter name"}
-              value={teacher.name}
-            />
-            <div className="form-group">
-              <label htmlFor="branch">Branch</label>
-              <select
-                id="branch"
-                className="form-control"
-                value={teacher.branch}
-              >
-                <option defaultValue>Select Branch</option>
-                {this.state.branches.map((b) => (
-                  <option key={b._id}>{b.name}</option>
-                ))}
-              </select>
-            </div>
             <div className="form-row">
               <div className="col">
                 <Input
-                  id={"designation"}
-                  label={"Designation"}
+                  id={"name"}
+                  label={"Name"}
                   type={"text"}
-                  placeholder={"Enter Designation"}
-                  value={teacher.value}
+                  placeholder={"Enter name"}
+                  value={teacher.name}
                 />
               </div>
               <div className="col-md-4">
@@ -87,6 +69,33 @@ class TeacherForm extends Component {
                 </div>
               </div>
             </div>
+            <div className="form-row">
+              <div className="col">
+                <div className="form-group">
+                  <label htmlFor="branch">Branch</label>
+                  <select
+                    id="branch"
+                    className="form-control"
+                    value={teacher.branch}
+                  >
+                    <option defaultValue>Select Branch</option>
+                    {this.state.branches.map((b) => (
+                      <option key={b._id}>{b.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col">
+                <Input
+                  id={"designation"}
+                  label={"Designation"}
+                  type={"text"}
+                  placeholder={"Enter Designation"}
+                  value={teacher.value}
+                />
+              </div>
+            </div>
+
             <div className="form-row">
               <div className="col">
                 <Input
@@ -107,6 +116,27 @@ class TeacherForm extends Component {
                 />
               </div>
             </div>
+            <label>Classes</label>
+            <table className="table table-sm table-bordered">
+              <thead>
+                <th>Branch</th>
+                <th>Semester</th>
+                <th>Subjects</th>
+              </thead>
+              <tbody>
+                {teacher.classes.map((c) => (
+                  <tr key={c.index}>
+                    <td>{c.branch}</td>
+                    <td>{c.sem + c.section}</td>
+                    <td>{c.subName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <AddClass />
+            <br />
+            <br />
             <div className="form-group">
               <label htmlFor="address">Address</label>
               <textarea

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { getBranches } from "../../services/brancheService";
 import { getTeachers } from "../../services/teachersService";
 import AddClass from "./addClassForm";
+import * as yup from "yup";
 
 import Input from "../FormComponents/input";
 
@@ -19,6 +20,19 @@ class TeacherForm extends Component {
       gender: "",
       classes: [],
     },
+    validationErrors: [],
+  };
+
+  schema = {
+    name: yup.string().required("Name is required").label("Name"),
+    branch: yup.string().required("Branch is required").label("Branch"),
+    designation: yup
+      .string()
+      .required("Designation is required")
+      .label("Designation"),
+    tid: yup.string().required("ID is required").label("ID"),
+    phone: yup.number().required("Phone is required").label("Phone"),
+    address: yup.string().required("Address is required").label("Address"),
   };
 
   async componentDidMount() {
@@ -33,6 +47,14 @@ class TeacherForm extends Component {
 
     const teacher = await getTeachers({ _id: teacherId });
     this.setState({ teacher: teacher.data[0] });
+  };
+
+  handleChange = async (e) => {
+    const { id, value } = e.currentTarget;
+    let teacher = this.state.teacher;
+
+    teacher[id] = value;
+    this.setState({ teacher });
   };
 
   render() {
@@ -52,6 +74,7 @@ class TeacherForm extends Component {
                   type={"text"}
                   placeholder={"Enter name"}
                   value={teacher.name}
+                  onChange={this.handleChange}
                 />
               </div>
               <div className="col-md-4">
@@ -61,6 +84,7 @@ class TeacherForm extends Component {
                     id="gender"
                     className="form-control"
                     value={teacher.gender}
+                    onChange={this.handleChange}
                   >
                     <option defaultValue>Select</option>
                     <option value="Female">Female</option>
@@ -77,6 +101,7 @@ class TeacherForm extends Component {
                     id="branch"
                     className="form-control"
                     value={teacher.branch}
+                    onChange={this.handleChange}
                   >
                     <option defaultValue>Select Branch</option>
                     {this.state.branches.map((b) => (
@@ -92,6 +117,7 @@ class TeacherForm extends Component {
                   type={"text"}
                   placeholder={"Enter Designation"}
                   value={teacher.value}
+                  onChange={this.handleChange}
                 />
               </div>
             </div>
@@ -99,11 +125,12 @@ class TeacherForm extends Component {
             <div className="form-row">
               <div className="col">
                 <Input
-                  id={"id"}
+                  id={"tid"}
                   label={"ID"}
                   type={"text"}
                   placeholder={"Enter ID"}
                   value={teacher.tid}
+                  onChange={this.handleChange}
                 />
               </div>
               <div className="col">
@@ -113,15 +140,18 @@ class TeacherForm extends Component {
                   type={"text"}
                   placeholder={"Enter Phone"}
                   value={teacher.phone}
+                  onChange={this.handleChange}
                 />
               </div>
             </div>
             <label>Classes</label>
             <table className="table table-sm table-bordered">
               <thead>
-                <th>Branch</th>
-                <th>Semester</th>
-                <th>Subjects</th>
+                <tr>
+                  <th>Branch</th>
+                  <th>Semester</th>
+                  <th>Subjects</th>
+                </tr>
               </thead>
               <tbody>
                 {teacher.classes.map((c) => (
@@ -134,7 +164,7 @@ class TeacherForm extends Component {
               </tbody>
             </table>
 
-            <AddClass />
+            <AddClass branches={this.state.branches} />
             <br />
             <br />
             <div className="form-group">
@@ -144,6 +174,7 @@ class TeacherForm extends Component {
                 id="address"
                 rows="3"
                 value={teacher.address}
+                onChange={this.handleChange}
               ></textarea>
             </div>
           </form>

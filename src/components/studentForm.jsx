@@ -4,6 +4,8 @@ import { getBranches } from "../services/brancheService";
 import * as yup from "yup";
 import Input from "./FormComponents/input";
 
+import _ from "lodash";
+
 class StudentForm extends Component {
   state = {
     data: {
@@ -27,6 +29,7 @@ class StudentForm extends Component {
     name: yup.string().required("Name is required").label("Name"),
     branch: yup.string().required("Select branch").label("Branch"),
     sem: yup.string().required("Select semester").label("Semester"),
+    section: yup.string().required("Enter Section"),
     USN: yup.string().required("Enter USN").label("USN"),
     gender: yup.string().required().label("Gender"),
     phone: yup.string().required("Phone is required").label("Phone"),
@@ -53,6 +56,22 @@ class StudentForm extends Component {
     e.preventDefault();
     console.log("Handle submit");
     console.log(this.state.data);
+    // Yup validation
+    const schema = yup.object().shape(this.schema);
+    let yupValidationError;
+    await schema
+      .validate(this.state.data, { abortEarly: false })
+      .catch((err) => {
+        console.log(err);
+        yupValidationError = _.zipObject(
+          err.inner.map((o) => o.path),
+          err.inner.map((o) => o.message)
+        );
+        this.setState({ validationErrors: yupValidationError });
+      });
+    console.log(yupValidationError);
+    if (yupValidationError) return;
+
     try {
       // PUT request to node
       const response = await saveStudent(this.state.data); // will throw error if response is not 200 which will be caught in catch block
@@ -126,6 +145,11 @@ class StudentForm extends Component {
                   <option key={b._id}>{b.name}</option>
                 ))}
               </select>
+              {this.state.validationErrors["branch"] && (
+                <div className="alert alert-danger">
+                  {this.state.validationErrors["branch"]}
+                </div>
+              )}
             </div>
             <div className="form-row">
               <Input
@@ -171,6 +195,11 @@ class StudentForm extends Component {
                 <option>Female</option>
                 <option>Male</option>
               </select>
+              {this.state.validationErrors["gender"] && (
+                <div className="alert alert-danger">
+                  {this.state.validationErrors["gender"]}
+                </div>
+              )}
             </div>
             <Input
               id={"phone"}
@@ -191,6 +220,11 @@ class StudentForm extends Component {
                 value={this.state.data.address}
                 //validationError={this.state.validationErrors["address"]}
               ></textarea>
+              {this.state.validationErrors["address"] && (
+                <div className="alert alert-danger">
+                  {this.state.validationErrors["address"]}
+                </div>
+              )}
             </div>
             <button type="submit" className="btn btn-primary">
               Submit

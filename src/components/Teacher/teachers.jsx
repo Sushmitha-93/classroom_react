@@ -50,7 +50,7 @@ class Teachers extends Component {
     //console.log(response);
 
     if (response.request.status === 200) {
-      let teachers = this.state.teachers.filter((t) => t._id != teacher._id);
+      let teachers = this.state.teachers.filter((t) => t._id !== teacher._id);
       this.setState({ teachers });
     }
   }

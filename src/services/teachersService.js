@@ -13,3 +13,8 @@ export function getTeachers(queryObj) {
 export function deleteTeacher(id) {
   return http.delete("/teachers/" + id);
 }
+
+export function saveTeacher(teacher) {
+  if (teacher._id) return http.put("/teachers/" + teacher._id, teacher);
+  else return http.post("/teachers/", teacher);
+}

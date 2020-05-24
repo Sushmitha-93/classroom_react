@@ -19,7 +19,7 @@ class StudentForm extends Component {
       address: "",
     },
     responseError: "",
-    validationErrors: {},
+    validationErrors: {}, //{name:"Name is required"}
     branches: [],
   };
 
@@ -58,20 +58,20 @@ class StudentForm extends Component {
     console.log(this.state.data);
     // Yup validation
     const schema = yup.object().shape(this.schema);
-    let yupValidationError;
+    let yupValidationErrors = {};
     await schema
       .validate(this.state.data, { abortEarly: false })
       .catch((err) => {
         console.log(err);
-        yupValidationError = _.zipObject(
-          err.inner.map((o) => o.path),
-          err.inner.map((o) => o.message)
-        );
-        this.setState({ validationErrors: yupValidationError });
+        err.inner.map((o) => (yupValidationErrors[o.path] = o.message));
+        this.setState({ validationErrors: yupValidationErrors });
       });
-    console.log(yupValidationError);
-    if (yupValidationError) return;
+    console.log(yupValidationErrors);
 
+    // if form validation errors exit
+    if (Object.keys(yupValidationErrors) > 0) return;
+
+    // if no form validation errors then go ahead and POST
     try {
       // PUT request to node
       const response = await saveStudent(this.state.data); // will throw error if response is not 200 which will be caught in catch block

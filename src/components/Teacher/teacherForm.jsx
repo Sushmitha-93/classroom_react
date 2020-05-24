@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getBranches } from "../../services/brancheService";
-import { getTeachers } from "../../services/teachersService";
+import { getTeachers, saveTeacher } from "../../services/teachersService";
 import AddClass from "./addClassForm";
 import * as yup from "yup";
 
@@ -51,10 +51,27 @@ class TeacherForm extends Component {
 
   handleChange = async (e) => {
     const { id, value } = e.currentTarget;
-    let teacher = this.state.teacher;
+    let { validationErrors, teacher } = this.state;
 
+    // Yup validation for that particular input
+    const schema = yup.object().shape({ [id]: this.schema[id] }); // Creating schema for that input only
+    await schema
+      .validate({ [id]: value })
+      .then(delete validationErrors[id])
+      .catch((err) => {
+        console.log(err);
+        validationErrors = { [err.path]: err.message };
+      });
+
+    // set value got from field
     teacher[id] = value;
-    this.setState({ teacher });
+    this.setState({ teacher, validationErrors });
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(this.state.teacher);
+    saveTeacher(this.state.teacher).then(this.props.history.push("/"));
   };
 
   render() {
@@ -65,7 +82,7 @@ class TeacherForm extends Component {
           <h1>
             {this.props.match.params.id === "new" ? "New " : ""}Teacher Form
           </h1>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <div className="form-row">
               <div className="col">
                 <Input
@@ -75,6 +92,7 @@ class TeacherForm extends Component {
                   placeholder={"Enter name"}
                   value={teacher.name}
                   onChange={this.handleChange}
+                  validationError={this.state.validationErrors["name"]}
                 />
               </div>
               <div className="col-md-4">
@@ -90,6 +108,11 @@ class TeacherForm extends Component {
                     <option value="Female">Female</option>
                     <option value="Male">Male</option>
                   </select>
+                  {this.state.validationErrors["gender"] && (
+                    <div className="alert alert-danger">
+                      {this.state.validationErrors["gender"]}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -108,6 +131,11 @@ class TeacherForm extends Component {
                       <option key={b._id}>{b.name}</option>
                     ))}
                   </select>
+                  {this.state.validationErrors["branch"] && (
+                    <div className="alert alert-danger">
+                      {this.state.validationErrors["branch"]}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col">
@@ -118,6 +146,7 @@ class TeacherForm extends Component {
                   placeholder={"Enter Designation"}
                   value={teacher.value}
                   onChange={this.handleChange}
+                  validationError={this.state.validationErrors["designation"]}
                 />
               </div>
             </div>
@@ -131,6 +160,7 @@ class TeacherForm extends Component {
                   placeholder={"Enter ID"}
                   value={teacher.tid}
                   onChange={this.handleChange}
+                  validationError={this.state.validationErrors["tid"]}
                 />
               </div>
               <div className="col">
@@ -141,6 +171,7 @@ class TeacherForm extends Component {
                   placeholder={"Enter Phone"}
                   value={teacher.phone}
                   onChange={this.handleChange}
+                  validationError={this.state.validationErrors["phone"]}
                 />
               </div>
             </div>
@@ -177,6 +208,9 @@ class TeacherForm extends Component {
                 onChange={this.handleChange}
               ></textarea>
             </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
           </form>
         </div>
       </div>

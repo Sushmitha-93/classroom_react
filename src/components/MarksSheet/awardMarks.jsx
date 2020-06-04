@@ -9,7 +9,7 @@ import TestNames from "./testNames";
 import TestSubjects from "./testSubjects";
 import MarksTable from "./marksTable";
 
-class MarksSheet extends Component {
+class AwardMarks extends Component {
   state = {
     branch: "",
     sem: 0,
@@ -127,7 +127,7 @@ class MarksSheet extends Component {
       <React.Fragment>
         <div className="container">
           <div className="row mt-3">
-            <h1 className="ml-3">Marks Sheet</h1>
+            <h1 className="ml-3">Award Marks</h1>
           </div>
           {/* Tests list filter component based on Branch,Sem,Section and month */}
           {this.state.subjectSelected === "" && (
@@ -179,4 +179,4 @@ class MarksSheet extends Component {
   }
 }
 
-export default MarksSheet;
+export default AwardMarks;

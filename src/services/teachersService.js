@@ -15,6 +15,8 @@ export function deleteTeacher(id) {
 }
 
 export function saveTeacher(teacher) {
-  if (teacher._id) return http.put("/teachers/" + teacher._id, teacher);
-  else return http.post("/teachers/", teacher);
+  if (teacher._id) {
+    console.log("saveTeacher call");
+    return http.put("/teachers/" + teacher._id, teacher);
+  } else return http.post("/teachers/", teacher);
 }

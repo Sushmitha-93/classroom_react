@@ -30,8 +30,9 @@ class TeacherForm extends Component {
       .string()
       .required("Designation is required")
       .label("Designation"),
+    gender: yup.string().required("Select Gender").label("Gender"),
     tid: yup.string().required("ID is required").label("ID"),
-    phone: yup.number().required("Phone is required").label("Phone"),
+    phone: yup.string().required("Phone is required").label("Phone"),
     address: yup.string().required("Address is required").label("Address"),
   };
 
@@ -47,6 +48,13 @@ class TeacherForm extends Component {
 
     const teacher = await getTeachers({ _id: teacherId });
     this.setState({ teacher: teacher.data[0] });
+  };
+
+  addClass = (newClass) => {
+    console.log(" teacher form Add class: ", newClass); // called from addClass component to pass addClass form input (new class info)
+    let teacher = this.state.teacher;
+    teacher.classes.push(newClass);
+    this.setState({ teacher });
   };
 
   handleChange = async (e) => {
@@ -71,7 +79,23 @@ class TeacherForm extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     console.log(this.state.teacher);
-    saveTeacher(this.state.teacher).then(this.props.history.push("/"));
+
+    // Yup valdiation for the whole form
+    const schema = yup.object().shape(this.schema);
+    await schema
+      .validate(this.state.teacher, { abortEarly: false })
+      .then(() => {
+        console.log("then");
+        saveTeacher(this.state.teacher).then(
+          this.props.history.push("/teachers")
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        let yupValidationErrors = {};
+        err.inner.map((o) => (yupValidationErrors[o.path] = o.message));
+        this.setState({ validationErrors: yupValidationErrors });
+      });
   };
 
   render() {
@@ -104,9 +128,9 @@ class TeacherForm extends Component {
                     value={teacher.gender}
                     onChange={this.handleChange}
                   >
-                    <option defaultValue>Select</option>
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
+                    <option defaultValue>Select Gender</option>
+                    <option>Female</option>
+                    <option>Male</option>
                   </select>
                   {this.state.validationErrors["gender"] && (
                     <div className="alert alert-danger">
@@ -144,7 +168,7 @@ class TeacherForm extends Component {
                   label={"Designation"}
                   type={"text"}
                   placeholder={"Enter Designation"}
-                  value={teacher.value}
+                  value={teacher.designation}
                   onChange={this.handleChange}
                   validationError={this.state.validationErrors["designation"]}
                 />
@@ -195,7 +219,7 @@ class TeacherForm extends Component {
               </tbody>
             </table>
 
-            <AddClass branches={this.state.branches} />
+            <AddClass branches={this.state.branches} addClass={this.addClass} />
             <br />
             <br />
             <div className="form-group">

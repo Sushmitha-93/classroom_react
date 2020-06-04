@@ -35,10 +35,10 @@ class LeftSideBar extends Component {
           <a className="list-group-item list-group-item-action">Exams / Test</a>
           <div className="submenu pl-3">
             <NavLink
-              to="/marksSheet"
+              to="/awardMarks"
               className="list-group-item list-group-item-action"
             >
-              Marks Sheet
+              Fill Marks
             </NavLink>
             <NavLink
               to="/studentMarksSheet"

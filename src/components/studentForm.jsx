@@ -31,7 +31,7 @@ class StudentForm extends Component {
     sem: yup.string().required("Select semester").label("Semester"),
     section: yup.string().required("Enter Section"),
     USN: yup.string().required("Enter USN").label("USN"),
-    gender: yup.string().required().label("Gender"),
+    gender: yup.string().required("Select Gender").label("Gender"),
     phone: yup.string().required("Phone is required").label("Phone"),
     address: yup.string().required("Address is required").label("Address"),
   };
